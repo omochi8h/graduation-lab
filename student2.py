@@ -419,7 +419,10 @@ class Kaitou(QFrame): #画面右
                 text2 = text2.replace(' ','')
                 text1 = text1.replace('\n','')
                 text2 = text2.replace('\n','')
-
+                #インデントの削除
+                text1 = text1.replace('	','')
+                text2 = text2.replace('	','')             
+                print(text2)
 
                 #コンパイル間隔
                 jikan = time.time()
