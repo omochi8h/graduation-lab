@@ -1,0 +1,122 @@
+結構前に書いたやつなのでteacher3，student2に使ってるやつで説明してないのがある
+
+
+変数について
+・無印の変数(app, kadaiなど)　→　その関数内でのみ有効
+・メンバ変数(self.button, self.kadaiなど)　→　そのクラス内でのみ有効
+・グローバル変数(kiiro, tab, window, kadaiidentify1, kadaiidentify2, seitoidentify)　→　他のクラスでも有効。事前に宣言
+
+
+全体の流れ
+下の方の3つ：class App(), def move(page), if ～ が全体の流れ。
+App()　→　表示するウィンドウの設定。最初に表示するタブの設定
+move(page)　→　表示しているタブを削除。新しいタブを挿入、表示。page引数によって決定。
+　　　　　　　　新しいタブをいちいち挿入しないと表示される変数が更新されない。
+　　　　　　　　この関数を使うためにwindow, tabはグローバル変数にしている。
+if ～　→　App()を実際に出す。PyQtの決まり文句みたいなやつ。
+他のクラス　→　1つ1つのタブの設定。
+
+
+ウィジェットの作成
+ウィジェットクラスをインスタンス化(widget=QLabel()など)。以降はその変数をいろいろ操作する。
+
+種類
+QLabel()　→　文字,写真を入れられる
+QPushButton()　→　ボタン
+QLineEdit()　→　テキストボックス(1行)
+QTextEdit()　→　テキストボックス(複数行)
+linenumber.QCodeEditor()　→　行番号付きのテキストボックス　linenumber.pyをインポートすると使える
+QTableWidget()　→　表
+QCheckBox()　→　チェックボックス
+QComboBox()　→　リストボックス
+他めっちゃいろいろある。
+
+ウィジェットの操作
+変数名.setFont　→　フォントを割り当てる
+変数名.setStyleSheet　→　背景色の設定
+変数名.move(x,y)　→　x座標, y座標の設定
+変数名.setGeometry(x,y,a,b)　→　x座標, y座標, 横幅, 縦幅の設定
+変数名.clicked.connect(関数名)　→　ボタンウィジェットのクリック時に関数に接続
+変数名.setText(a)　→　LineEditに文字列aを入力
+変数名.text()　→　LineEditの文字列を出力
+変数名.setPlainText(a)　→　TextEditに文字列aを入力
+変数名.toPlainText()　→　TextEditの文字列を出力
+変数名.変数名　→　ボタンのメンバ変数を追加するのに使用している。sender()関数↓↓も参考に
+
+
+レイアウトについて
+move()やsetGeometry()でもボタンを配置できるが，レイアウトも便利。
+やり方
+①変数にレイアウト作成クラスを割り当てる。
+②変数を操作し，ウィジェットやレイアウトを追加。
+③大枠のレイアウトを設定
+
+①
+レイアウトの種類
+QHBoxLayout()　→　水平方向に並べる。
+QVBoxLayout()　→　垂直方向に並べる。
+QGridLayout()　→　格子状に並べる。
+
+hbox = QHBoxLayout()　のように宣言
+
+②
+変数名.addWidget.(ウィジェット変数名)　→　レイアウトの種類に従ってウィジェットを追加。
+　　　　　　　　　　　　　　　　　　　　　　Gridではいろいろ引数がある(行,列,桁,長さ)
+変数名.addLayout.(レイアウト変数名)　→　レイアウトの種類に従ってレイアウトを追加。
+　　　　　　　　　　　　　　　　　　　　　縦に並べたボタン群を横に並べる、とか。
+変数名.addStretch(1)　→　自動伸縮される空白スペースを追加。
+
+③
+self.setLayout(hbox)　のように設定。大枠のレイアウトなので，1つのタブに1つまで。
+
+
+配列について
+配列の型を3つ使用している。
+・タプル
+　(要素1, 要素2, 要素3, …)　(要素1,)←,がないとタプルにならない
+　初期値を決定すると要素の追加ができない。データベースのコマンドに値を渡すのに使用している。
+
+・リスト
+　[要素1, 要素2, 要素3, …]
+　要素の追加ができる配列。　→　配列名.append(追加する要素)
+　リスト名[-1]でリストの末尾の要素を取得できる。
+
+・セット
+　{要素1, 要素2, 要素3, …}
+　重複する要素を持たない配列。　配列名 = set()で空のセットを宣言。
+　要素の追加ができる。　→　配列名.add(追加する要素)
+　データベースの重複要素ありの要素群を整理してボタンを作成するときに使用。
+
+
+メッセージボックス
+https://webbibouroku.com/Blog/Article/qgis3-python-messagebox に全部載っている
+
+
+データベースの操作
+これがわかりやすい
+https://reffect.co.jp/python/python-sqlite-database
+
+
+タブ操作
+tabBar().hide()　→　これがないと上に変なのが出てきます。
+resize()　→　ウィンドウの大きさ
+move()　→　ウィンドウの表示位置。デフォルトでは画面の左上に表示される。
+setWindowTitle()　→　タイトルの設定
+addTab()　→　タブ追加
+removeTab()　→　タブ削除
+setStyleSheet　→　背景色の設定
+setCurrentIndex()　→　画面切り替え
+self.setStyleSheet("QTabWidget::pane { border: 0; }")　→　ネットにあったやつ。なしでも動くがよくわからないので入れたままにしている。
+
+
+その他の関数
+sorted()　→　セットの要素順をソートして抽出するのに使用
+sender()　→　どのボタンに呼び出されたか判定し，そのボタンのテキストやメンバ変数が使えるようになる。
+round(int, n)　→　変数を四捨五入。nは有効数字
+int()　→　文字列を数値に変換
+str()　→　数値を文字列に変換
+enumerate(配列名)　→　配列の各要素のインデックス値(0,1,…)を一緒にfor文で処理できる。
+time.time()　→　エポック秒(1970年1月1日00:00からの経過秒数)を取得
+QCoreApplication.instance().quit　→　ウィンドウを消す
+len()　→　配列や文字列の長さを返す
+try,except,else　→　例外処理
